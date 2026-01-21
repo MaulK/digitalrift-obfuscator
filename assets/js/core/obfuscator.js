@@ -422,8 +422,17 @@ end`.trim();
 
         wrappedCode += `end)(...)`
 
-        // Minify: Remove all newlines and collapse whitespace
-        wrappedCode = wrappedCode
+        // Minify: Remove newlines and collapse whitespace carefully to preserve escape sequences
+        // First, protect strings with escape sequences by marking them
+        const stringProtector = [];
+        let protectedCode = wrappedCode.replace(/"([^"\\]*(\\.[^"\\]*)*)"/g, (match) => {
+            const index = stringProtector.length;
+            stringProtector.push(match);
+            return `__STRING_${index}__`;
+        });
+
+        // Now minify the protected code
+        protectedCode = protectedCode
             .replace(/\n/g, ' ')  // Replace newlines with spaces
             .replace(/\s+/g, ' ') // Collapse multiple spaces into one
             .replace(/\s*([(){}[\],;=<>+\-*/~])\s*/g, '$1') // Remove spaces around operators
@@ -437,6 +446,11 @@ end`.trim();
             .replace(/\s+for\s+/g, ' for ') // Keep space around 'for'
             .replace(/\s+do\s+/g, ' do ') // Keep space around 'do'
             .replace(/^\s+|\s+$/g, ''); // Trim leading/trailing whitespace
+
+        // Restore the protected strings
+        wrappedCode = protectedCode.replace(/__STRING_(\d+)__/g, (match, index) => {
+            return stringProtector[parseInt(index)];
+        });
 
         const endTime = performance.now();
         const executionTime = Math.round(endTime - startTime);
