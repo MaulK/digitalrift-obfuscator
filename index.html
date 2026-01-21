@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Rift - Luau Script Obfuscator</title>
+    <meta name="description"
+        content="Advanced Luau script obfuscator with immersive dimensional portal effects. Secure your Roblox scripts with cutting-edge obfuscation technology.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body>
+    <!-- Animated Background -->
+    <canvas id="rift-canvas" class="rift-canvas"></canvas>
+    <div class="floating-shapes"></div>
+    <canvas id="cursor-trail" class="cursor-trail"></canvas>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-container">
+                <div class="logo-rift"></div>
+                <h1 class="logo-text">
+                    <span class="logo-word">DIGITAL</span>
+                    <span class="logo-word">RIFT</span>
+                </h1>
+            </div>
+            <p class="tagline">Dimensional Script Obfuscation</p>
+        </header>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <span class="stat-label">Performance</span>
+                <span class="stat-value" id="fps-counter">60 FPS</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Particles</span>
+                <span class="stat-value" id="particle-count">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Status</span>
+                <span class="stat-value status-ready" id="status">Ready</span>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Input Panel -->
+            <section class="code-panel input-panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">
+                        <span class="panel-icon">⟨</span>
+                        Input Script
+                    </h2>
+                    <div class="panel-actions">
+                        <button class="action-btn" id="load-sample">
+                            <span class="btn-glow"></span>
+                            Load Sample
+                        </button>
+                        <button class="action-btn" id="clear-input">
+                            <span class="btn-glow"></span>
+                            Clear
+                        </button>
+                    </div>
+                </div>
+                <div class="code-editor-wrapper">
+                    <textarea id="input-code" class="code-editor"
+                        placeholder="-- Paste your Luau script here...&#10;&#10;local function greet(name)&#10;    print('Hello, ' .. name)&#10;end&#10;&#10;greet('World')"
+                        spellcheck="false"></textarea>
+                    <div class="editor-overlay"></div>
+                </div>
+                <div class="panel-footer">
+                    <span class="footer-info" id="input-lines">Lines: 0</span>
+                    <span class="footer-info" id="input-chars">Characters: 0</span>
+                </div>
+            </section>
+
+            <!-- Center Control Panel -->
+            <section class="control-panel">
+                <div class="rift-divider">
+                    <canvas id="rift-divider-canvas" class="rift-divider-canvas"></canvas>
+                </div>
+
+                <button class="obfuscate-btn" id="obfuscate-btn">
+                    <span class="btn-bg"></span>
+                    <span class="btn-text">
+                        <span class="btn-icon">⚡</span>
+                        OBFUSCATE
+                    </span>
+                    <span class="btn-particles"></span>
+                </button>
+
+                <!-- Settings -->
+                <div class="settings-container">
+                    <h3 class="settings-title">Obfuscation Settings</h3>
+
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            <input type="checkbox" id="opt-names" checked>
+                            <span class="checkbox-custom"></span>
+                            <span class="label-text">Rename Variables</span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            <input type="checkbox" id="opt-strings" checked>
+                            <span class="checkbox-custom"></span>
+                            <span class="label-text">Encrypt Strings</span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            <input type="checkbox" id="opt-control" checked>
+                            <span class="checkbox-custom"></span>
+                            <span class="label-text">Control Flow</span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            <input type="checkbox" id="opt-deadcode">
+                            <span class="checkbox-custom"></span>
+                            <span class="label-text">Dead Code Injection</span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            <input type="checkbox" id="opt-constants">
+                            <span class="checkbox-custom"></span>
+                            <span class="label-text">Wrap Constants</span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            <input type="checkbox" id="opt-antivm">
+                            <span class="checkbox-custom"></span>
+                            <span class="label-text">Anti-VM Detection</span>
+                        </label>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Output Panel -->
+            <section class="code-panel output-panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">
+                        <span class="panel-icon">⟩</span>
+                        Obfuscated Output
+                    </h2>
+                    <div class="panel-actions">
+                        <button class="action-btn" id="copy-output" disabled>
+                            <span class="btn-glow"></span>
+                            Copy
+                        </button>
+                        <button class="action-btn" id="download-output" disabled>
+                            <span class="btn-glow"></span>
+                            Download
+                        </button>
+                    </div>
+                </div>
+                <div class="code-editor-wrapper">
+                    <textarea id="output-code" class="code-editor" placeholder="-- Obfuscated code will appear here..."
+                        spellcheck="false" readonly></textarea>
+                    <div class="editor-overlay"></div>
+                </div>
+                <div class="panel-footer">
+                    <span class="footer-info" id="output-lines">Lines: 0</span>
+                    <span class="footer-info" id="output-chars">Characters: 0</span>
+                    <span class="footer-info" id="obfuscation-time">Time: 0ms</span>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p class="footer-text">
+                <span class="footer-highlight">Digital Rift</span> - Advanced Luau Obfuscation Technology
+            </p>
+            <p class="footer-warning">
+                ⚠️ Use responsibly. Obfuscation is for code protection, not malicious purposes.
+            </p>
+        </footer>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p class="loading-text">Entering the Digital Rift...</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/core/utils.js"></script>
+    <script src="assets/js/ui/particles.js"></script>
+    <script src="assets/js/ui/animations.js"></script>
+    <script src="assets/js/core/obfuscator.js"></script>
+    <script src="assets/js/ui/app.js"></script>
+</body>
+
+</html>
